@@ -1,0 +1,14 @@
+Describe Cron
+  Before all
+    " let C = vital#vital#new().import('Cron')
+  End
+
+  Describe .start()
+    Skip no avaliable api currently.
+  End
+
+  Describe .set()
+    Skip no avaliable api currently.
+  End
+
+End

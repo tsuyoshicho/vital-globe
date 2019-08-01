@@ -62,6 +62,7 @@ install:
 before_script:
   - git clone --depth 1 --branch v1.5.4 --single-branch https://github.com/thinca/vim-themis /tmp/vim-themis
   - git clone --depth 1 --single-branch https://github.com/vim-jp/vital.vim /tmp/vital.vim
+  - git clone --depth 1 --single-branch https://github.com/lambdalisue/vital-Whisky.git /tmp/vital.Whisky
   - git clone --depth 1 https://github.com/Shougo/vimproc.vim /tmp/vimproc
   - (cd /tmp/vimproc && make)
 
@@ -71,7 +72,7 @@ script:
   - vim --version
   - |
     if [[ "${RUN_LINT}" != "true" ]]; then
-        /tmp/vim-themis/bin/themis --runtimepath /tmp/vimproc --runtimepath /tmp/vital.vim --exclude ConcurrentProcess --reporter dot
+        /tmp/vim-themis/bin/themis --runtimepath /tmp/vimproc --runtimepath /tmp/vital.vim --runtimepath /tmp/vital.Whisky --exclude ConcurrentProcess --reporter dot
     fi
   - if [[ "${RUN_LINT}" == "true" ]] ; then bash scripts/run-lint-on-ci.sh ; fi
 

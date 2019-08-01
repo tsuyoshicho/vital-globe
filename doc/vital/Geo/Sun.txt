@@ -1,0 +1,69 @@
+*vital/Geo/Sun.txt*	Utilities for Sunset/Sunrize and other
+
+Maintainer: Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
+
+==============================================================================
+CONTENTS				*Vital.Geo.Sun-contents*
+
+INTRODUCTION			|Vital.Geo.Sun-introduction|
+FUNCTIONS			|Vital.Geo.Sun-functions|
+OBJECTS				|Vital.Geo.Sun-objects|
+  Sun Object			|Vital.Geo.Sun-objects-Sun|
+
+
+==============================================================================
+INTRODUCTION				*Vital.Geo.Sun-introduction*
+
+*Vital.Geo.Sun* is a library that is sunset/sunrise and others time of day.
+
+Sunset and sunrise times for any location - Free calendars and calculator:
+https://sunrise-sunset.org/
+
+==============================================================================
+FUNCTIONS				*Vital.Geo.Sun-functions*
+
+new()					*Vital.Geo.Sun.new()*
+
+	Creates a new Sun object.
+
+
+==============================================================================
+OBJECTS					*Vital.Geo.Sun-objects*
+
+------------------------------------------------------------------------------
+Sun Object				*Vital.Geo.Sun-objects-Sun*
+
+Sun object has the following data after resolving the API request/response
+process.
+
+This object has below:
+- status : |v:null|(unresolved) or |v:false|(failure) or |v:true|(success)
+- result : see below
+- json   : raw response json data.
+
+result data is:
+- sunrise        : |Vital.DateTime-DateTime| object
+- sunset         : |Vital.DateTime-DateTime| object
+- solar_noon     : |Vital.DateTime-DateTime| object
+- day_length     : |Vital.DateTime-TimeDelta| object
+- twilight
+  - civil
+    -begin       : |Vital.DateTime-DateTime| object
+    -end         : |Vital.DateTime-DateTime| object
+  - nautical
+    - begin      : |Vital.DateTime-DateTime| object
+    - end        : |Vital.DateTime-DateTime| object
+  - astronomical
+    - begin      : |Vital.DateTime-DateTime| object
+    - end        : |Vital.DateTime-DateTime| object
+
+					*Vital.Geo.Sun-Sun.resolve()*
+{sun}.resolve({longitude}, {latitude}, [{date}])
+
+	Resolve sunset/sunrise at {longitude}, {latitude}.
+	If add {date} at |Vital.DateTime-DateTime| object, resolve target
+	{date}'s sunset/sunrize.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

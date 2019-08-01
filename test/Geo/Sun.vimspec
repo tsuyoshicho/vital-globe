@@ -1,0 +1,18 @@
+Describe Geo.Sun
+  Before all
+    let sun = vital#vital#new().import('Geo.Sun')
+  End
+
+  Describe .new()
+    let obj = sun.new()
+    Assert NotEquals(obj, v:null, 'create object')
+  End
+
+  Context Sun object
+    Describe .resolve()
+      let obj = sun.new()
+      call obj.resolve(140 ,35)
+      Assert NotEquals(obj.status, v:null, 'object result status')
+    End
+  End
+End

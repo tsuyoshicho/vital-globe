@@ -27,7 +27,7 @@ function! s:new() abort
   return deepcopy(s:Sun)
 endfunction
 
-function! s:Sun.resolve(long,lat) abort
+function! s:Sun.resolve(long,lat,...) abort
   if a:0 > 0
     let date = a:1
   else
@@ -41,8 +41,8 @@ function! s:Sun.resolve(long,lat) abort
         \ 'formatted' : 0,
         \ }
 
-  let param.lng = string(floor(a:long))
-  let param.lat = string(floor(a:lat ))
+  let param.lng = string(a:long + 0.0)
+  let param.lat = string(a:lat  + 0.0)
   let param.formatted = 0
   let param.date = date.format('%F')
 

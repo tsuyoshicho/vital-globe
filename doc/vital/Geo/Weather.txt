@@ -1,0 +1,67 @@
+*vital/Geo/Weather.txt*				Utilities for Weather and other
+
+Maintainer: Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
+
+==============================================================================
+CONTENTS				*Vital.Geo.Weather-contents*
+
+INTRODUCTION			|Vital.Geo.Weather-introduction|
+FUNCTIONS			|Vital.Geo.Weather-functions|
+OBJECTS				|Vital.Geo.Weather-objects|
+  Weather Object			|Vital.Geo.Weather-objects-Weather|
+
+
+==============================================================================
+INTRODUCTION				*Vital.Geo.Weather-introduction*
+
+*Vital.Geo.Weather* is a library that is weather and others.
+
+chubin/wttr.in: The right way to check the weather
+https://github.com/chubin/wttr.in
+
+Service URL
+http://wttr.in/
+
+==============================================================================
+FUNCTIONS				*Vital.Geo.Weather-functions*
+
+new()					*Vital.Geo.Weather.new()*
+
+	Creates a new Weather object.
+
+
+==============================================================================
+OBJECTS					*Vital.Geo.Weather-objects*
+
+------------------------------------------------------------------------------
+Weather Object				*Vital.Geo.Weather-objects-Weather*
+
+Weather object has the following data after resolving the API request/response
+process.
+
+This object has below:
+- status  : |v:null|(unresolved) or |v:false|(failure) or |v:true|(success)
+- result  : see below
+- message : today weather forcast ascii art message.
+
+result data is:
+- Weather       : Weather condition (string:weather emoji icon)
+- Condition     : Weather condition (string:textual name)
+- Humidity      : Humidity          (string:%)
+- Temperature   : Temperature       (string:degree Celsius)
+- Wind          : Wind              (string:wind direction emoji icon and
+                                            speed m/s)
+- Location      : Location          (string:"longitude,latitude" at float)
+- Moonphase     : Moonphase         (string:moonphse emoji icon)
+- Moonday       : Moonday           (string:moonday count)
+- Precipitation : Precipitation     (string:mm)
+- Pressure      : Pressure          (string:hPa)
+
+					*Vital.Geo.Weather-Weather.resolve()*
+{weather}.resolve({longitude}, {latitude})
+
+	Resolve weather at {longitude}, {latitude}.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

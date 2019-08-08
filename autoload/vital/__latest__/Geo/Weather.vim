@@ -7,11 +7,10 @@ set cpo&vim
 function! s:_vital_loaded(V) abort
   let s:V    = a:V
   let s:http = s:V.import('Web.HTTP')
-  let s:date = s:V.import('DateTime')
 endfunction
 
 function! s:_vital_depends() abort
-  return [ 'Web.HTTP', 'DateTime' ]
+  return [ 'Web.HTTP' ]
 endfunction
 
 let s:Weather = {
@@ -26,12 +25,7 @@ function! s:new() abort
   return deepcopy(s:Weather)
 endfunction
 
-function! s:Weather.resolve(long,lat,...) abort
-  if a:0 > 0
-    let date = a:1
-  else
-    let date = s:date.now()
-  endif
+function! s:Weather.resolve(long,lat) abort
 
    " c    Weather condition,
    " C    Weather condition textual name,
@@ -44,13 +38,12 @@ function! s:Weather.resolve(long,lat,...) abort
    " p    precipitation (mm),
    " P    pressure (hPa),
 
-   let items =  ['Weather condition',
-         \ 'Weather condition textual name',
+   let items =  ['Weather', 'Condition',
          \ 'Humidity', 'Temperature', 'Wind',
          \ 'Location', 'Moonphase', 'Moonday',
-         \ 'precipitation', 'pressure']
+         \ 'Precipitation', 'Pressure']
 
-  let param = {'format': '"%c#%C#%h#%t#%w#%l#%m#%M#%p#%P"'}
+  let param = {'format': '%c#%C#%h#%t#%w#%l#%m#%M#%p#%P'}
   let opt = join(['m', 'M', 'Q', '0', 'A', 'T'])
 
   let location = string(a:lat + 0.0) . ',' . string(a:long + 0.0)
@@ -63,7 +56,7 @@ function! s:Weather.resolve(long,lat,...) abort
     let self.status = v:true
     let self.message = msg.content
 
-    let resultraw = split(join(split(res.content, '\n', 0)), '\(#\|"\)', 0)
+    let resultraw = split(join(split(res.content, '\n', 0)), '#', 0)
     let result = {}
     for i in range(len(items))
       let result[items[i]] = resultraw[i]

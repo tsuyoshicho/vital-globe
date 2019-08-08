@@ -1,0 +1,63 @@
+*vital/Geo/Location.txt*		Utilities for (IP) Location and other
+
+Maintainer: Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
+
+==============================================================================
+CONTENTS				*Vital.Geo.Location-contents*
+
+INTRODUCTION			|Vital.Geo.Location-introduction|
+FUNCTIONS			|Vital.Geo.Location-functions|
+OBJECTS				|Vital.Geo.Location-objects|
+  Location Object			|Vital.Geo.Location-objects-Location|
+
+
+==============================================================================
+INTRODUCTION				*Vital.Geo.Location-introduction*
+
+*Vital.Geo.Location* is a library that is IP base location and others.
+
+What is my IP address? - ifconfig.co
+https://ifconfig.co/
+
+==============================================================================
+FUNCTIONS				*Vital.Geo.Location-functions*
+
+new()					*Vital.Geo.Location.new()*
+
+	Creates a new Location object.
+
+
+==============================================================================
+OBJECTS					*Vital.Geo.Location-objects*
+
+------------------------------------------------------------------------------
+Location Object				*Vital.Geo.Location-objects-Location*
+
+Location object has the following data after resolving the API request/response
+process.
+
+This object has below:
+- status  : |v:null|(unresolved) or |v:false|(failure) or |v:true|(success)
+- result  : see below
+
+result data is:
+- ip          : IP Address (IPv4 or IPv6)
+- ip_decimal  : IP Address)(decimal format)
+- country     : Country name
+- country_eu  : Country in EU? |v:true| or |v:false|
+- country_iso : ISO Country Code
+- city        : City name
+- latitude    : Latitude  value (float value)
+- longitude   : Longitude value (float value)
+- asn         : ASN Number
+- asn_org     : ASN Organization
+
+
+					*Vital.Geo.Location-Location.resolve()*
+{location}.resolve()
+
+	Resolve location at current {ip address}.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

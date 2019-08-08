@@ -39,7 +39,7 @@ function! s:Weather.resolve(long,lat,...) abort
    " t    Temperature,
    " w    Wind,
    " l    Location,
-   " m    Moonphase 倦健兼券剣喧圏堅,
+   " m    Moonphase,
    " M    Moonday,
    " p    precipitation (mm),
    " P    pressure (hPa),

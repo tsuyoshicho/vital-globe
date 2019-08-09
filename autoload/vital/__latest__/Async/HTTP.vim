@@ -182,13 +182,17 @@ function! s:_build_settings(args) abort
   return settings
 endfunction
 
-function! s:_make_header_args(headdata, option, quote) abort
-  let args = ''
+function! s:_make_header_args(headdata, option, quote, join) abort
+  let args = []
   for [key, value] in items(a:headdata)
     if s:Prelude.is_windows()
       let value = substitute(value, '"', '"""', 'g')
     endif
-    let args .= ' ' . a:option . a:quote . key . ': ' . value . a:quote
+    if a:join
+      let args += [a:option . a:quote . key . ': ' . value . a:quote]
+    else
+      let args += [a:option , a:quote . key . ': ' . value . a:quote]
+    endif
   endfor
   return args
 endfunction
@@ -296,12 +300,12 @@ endfunction
 
 function! s:clients.curl.request(settings) abort
   let quote = s:_quote()
-  let command = self._command(a:settings)
+  let command = [self._command(a:settings)]
   if has_key(a:settings, 'unixSocket')
-    let command .= ' --unix-socket ' . quote . a:settings.unixSocket . quote
+    let command += [' --unix-socket' , quote . a:settings.unixSocket . quote]
   endif
   let a:settings._file.header = s:_tempname()
-  let command .= ' --dump-header ' . quote . a:settings._file.header . quote
+  let command += ['--dump-header' , quote . a:settings._file.header . quote]
   let has_output_file = has_key(a:settings, 'outputFile')
   if has_output_file
     let output_file = a:settings.outputFile
@@ -309,22 +313,22 @@ function! s:clients.curl.request(settings) abort
     let output_file = s:_tempname()
     let a:settings._file.content = output_file
   endif
-  let command .= ' --output ' . quote . output_file . quote
+  let command += ['--output' , quote . output_file . quote]
   if has_key(a:settings, 'gzipDecompress') && a:settings.gzipDecompress
-    let command .= ' --compressed '
+    let command += ['--compressed']
   endif
-  let command .= ' -L -s -k '
+  let command += ['-L', '-s', '-k']
   if a:settings.method ==? 'HEAD'
-    let command .= '--head'
+    let command += ['--head']
   else
-    let command .= '-X ' . a:settings.method
+    let command += ['-X' , a:settings.method]
   endif
-  let command .= ' --max-redirs ' . a:settings.maxRedirect
-  let command .= s:_make_header_args(a:settings.headers, '-H ', quote)
+  let command += ['--max-redirs' , string(a:settings.maxRedirect)]
+  let command += s:_make_header_args(a:settings.headers, '-H', quote, 0)
   let timeout = get(a:settings, 'timeout', '')
-  let command .= ' --retry ' . a:settings.retry
+  let command += ['--retry' , string(a:settings.retry)]
   if timeout =~# '^\d\+$'
-    let command .= ' --max-time ' . timeout
+    let command += ['--max-time' , string(timeout)]
   endif
   if has_key(a:settings, 'username')
     let auth = a:settings.username . ':' . get(a:settings, 'password', '')
@@ -337,15 +341,15 @@ function! s:clients.curl.request(settings) abort
     else
       let method = 'anyauth'
     endif
-    let command .= ' --' . method . ' --user ' . quote . auth . quote
+    let command += ['--' . method , '--user' , quote . auth . quote]
   endif
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)
-    let command .= ' --data-binary @' . quote . a:settings._file.post . quote
+    let command += ['--data-binary', '@' . quote . a:settings._file.post . quote]
   endif
-  let command .= ' ' . quote . a:settings.url . quote
+  let command += [quote . a:settings.url . quote]
 
-  return s:Process.start(split(command, ' '))
+  return s:Process.start(command)
         \.then({v -> s:_curl_postprocess(v, a:settings,
         \        {
         \          'has' : has_output_file,
@@ -408,15 +412,15 @@ function! s:clients.wget.request(settings) abort
     throw 'vital: Async.HTTP: unixSocket only can be used with the curl.'
   endif
   let quote = s:_quote()
-  let command = self._command(a:settings)
+  let command = [self._command(a:settings)]
   let method = a:settings.method
   if method ==# 'HEAD'
-    let command .= ' --spider'
+    let command += ['--spider']
   elseif method !=# 'GET' && method !=# 'POST'
     let a:settings.headers['X-HTTP-Method-Override'] = a:settings.method
   endif
   let a:settings._file.header = s:_tempname()
-  let command .= ' -o ' . quote . a:settings._file.header . quote
+  let command += ['-o' , quote . a:settings._file.header . quote]
   let has_output_file = has_key(a:settings, 'outputFile')
   if has_output_file
     let output_file = a:settings.outputFile
@@ -424,28 +428,28 @@ function! s:clients.wget.request(settings) abort
     let output_file = s:_tempname()
     let a:settings._file.content = output_file
   endif
-  let command .= ' -O ' . quote . output_file . quote
-  let command .= ' --server-response -q -L '
-  let command .= ' --max-redirect=' . a:settings.maxRedirect
-  let command .= s:_make_header_args(a:settings.headers, '--header=', quote)
+  let command += ['-O' , quote . output_file . quote]
+  let command += ['--server-response', '-q', '-L']
+  let command += ['--max-redirect=' . a:settings.maxRedirect]
+  let command += s:_make_header_args(a:settings.headers, '--header=', quote, 1)
   let timeout = get(a:settings, 'timeout', '')
-  let command .= ' --tries=' . a:settings.retry
+  let command += ['--tries=' . a:settings.retry]
   if timeout =~# '^\d\+$'
-    let command .= ' --timeout=' . timeout
+    let command += ['--timeout=' . timeout]
   endif
   if has_key(a:settings, 'username')
-    let command .= ' --http-user=' . quote . escape(a:settings.username, quote) . quote
+    let command += ['--http-user=' . quote . escape(a:settings.username, quote) . quote]
   endif
   if has_key(a:settings, 'password')
-    let command .= ' --http-password=' . quote . escape(a:settings.password, quote) . quote
+    let command += ['--http-password=' . quote . escape(a:settings.password, quote) . quote]
   endif
-  let command .= ' ' . quote . a:settings.url . quote
+  let command += [quote . a:settings.url . quote]
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)
-    let command .= ' --post-file=' . quote . a:settings._file.post . quote
+    let command += ['--post-file=' . quote . a:settings._file.post . quote]
   endif
 
-  return s:Process.start(split(command, ' '))
+  return s:Process.start(command)
         \.then({v -> s:_wget_postprocess(v, a:settings,
         \        {
         \          'has' : has_output_file,

@@ -28,20 +28,20 @@ function! s:new() abort
 endfunction
 
 function! s:Sun.resolve(long,lat,...) abort
-  let param = s:_response_preprocess(self, {
+  let req = s:_request_process(self, {
         \ 'long' : a:long,
         \ 'lat'  : a:lat,
         \ 'date' : (a:0 > 0) ? a:1 : s:date.now(),
         \})
 
-  let res = s:http.get(s:SITE_URL, s:http.encodeURI(param))
+  let res = s:http.get(s:SITE_URL, s:http.encodeURI(req.param))
 
-  call s:_response_postprocess(self, res)
+  call s:_response_process(self, res)
 
   return self
 endfunction
 
-function! s:_response_preprocess(obj, args) abort
+function! s:_request_process(obj, args) abort
   let param = {
         \ 'lat'       : 0.0,
         \ 'lng'       : 0.0,
@@ -54,10 +54,10 @@ function! s:_response_preprocess(obj, args) abort
   let param.formatted = 0
   let param.date = a:args.date.format('%F')
 
-  return param
+  return { 'param' : param }
 endfunction
 
-function! s:_response_postprocess(obj, res) abort
+function! s:_response_process(obj, res) abort
   let obj = a:obj
   let res = a:res
 

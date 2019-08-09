@@ -6,12 +6,13 @@ function! s:_vital_loaded(V) abort
   let s:Prelude = s:V.import('Prelude')
   let s:String = s:V.import('Data.String')
 
+  let s:HTTP = s:V.import('Web.HTTP')
   let s:Process  = s:V.import('Async.Promise.Process')
   let s:Deferred = s:V.import('Async.Promise.Deferred')
 endfunction
 
 function! s:_vital_depends() abort
-  return ['Prelude', 'Data.String', 'Async.Promise.Process', 'Async.Promise.Deferred']
+  return ['Prelude', 'Data.String', 'Web.HTTP', 'Async.Promise.Process', 'Async.Promise.Deferred']
 endfunction
 
 function! s:__urlencode_char(c) abort
@@ -22,14 +23,14 @@ function! s:request(...) abort
   let settings = s:_build_settings(a:000)
   let settings.method = toupper(settings.method)
   if !has_key(settings, 'url')
-    throw 'vital: Web.HTTP: "url" parameter is required.'
+    throw 'vital: Async.HTTP: "url" parameter is required.'
   endif
   if !s:Prelude.is_list(settings.client)
     let settings.client = [settings.client]
   endif
   let client = s:_get_client(settings)
   if empty(client)
-    throw 'vital: Web.HTTP: Available client not found: '
+    throw 'vital: Async.HTTP: Available client not found: '
           \    . string(settings.client)
   endif
   if has_key(settings, 'contentType')
@@ -37,7 +38,7 @@ function! s:request(...) abort
   endif
   if has_key(settings, 'param')
     if s:Prelude.is_dict(settings.param)
-      let getdatastr = s:encodeURI(settings.param)
+      let getdatastr = s:HTTP.encodeURI(settings.param)
     else
       let getdatastr = settings.param
     endif
@@ -114,7 +115,7 @@ endfunction
 
 function! s:_postdata(data) abort
   if s:Prelude.is_dict(a:data)
-    return [s:encodeURI(a:data)]
+    return [s:HTTP.encodeURI(a:data)]
   elseif s:Prelude.is_list(a:data)
     return a:data
   else
@@ -166,7 +167,7 @@ function! s:_build_settings(args) abort
         \ }
   let args = copy(a:args)
   if len(args) == 0
-    throw 'vital: Web.HTTP: request() needs one or more arguments.'
+    throw 'vital: Async.HTTP: request() needs one or more arguments.'
   endif
   if s:Prelude.is_dict(args[-1])
     call extend(settings, remove(args, -1))
@@ -330,7 +331,7 @@ function! s:clients.curl.request(settings) abort
     let auth = escape(auth, quote)
     if has_key(a:settings, 'authMethod')
       if index(['basic', 'digest', 'ntlm', 'negotiate'], a:settings.authMethod) == -1
-        throw 'vital: Web.HTTP: Invalid authorization method: ' . a:settings.authMethod
+        throw 'vital: Async.HTTP: Invalid authorization method: ' . a:settings.authMethod
       endif
       let method = a:settings.authMethod
     else
@@ -344,7 +345,7 @@ function! s:clients.curl.request(settings) abort
   endif
   let command .= ' ' . quote . a:settings.url . quote
 
-  return s:Process.start(command)
+  return s:Process.start(split(command, ' '))
         \.then({v -> s:_curl_postprocess(v, a:settings,
         \        {
         \          'has' : has_output_file,
@@ -360,9 +361,9 @@ function! s:_curl_postprocess(response, settings, output) abort
   let headers = map(header_chunks, 'split(v:val, "\r\n")')
   if retcode != 0 && empty(headers)
     if has_key(s:clients.curl.errcode, retcode)
-      throw 'vital: Web.HTTP: ' . s:clients.curl.errcode[retcode]
+      throw 'vital: Async.HTTP: ' . s:clients.curl.errcode[retcode]
     else
-      throw 'vital: Web.HTTP: Unknown error code has occurred in curl: code=' . retcode
+      throw 'vital: Async.HTTP: Unknown error code has occurred in curl: code=' . retcode
     endif
   endif
   if !empty(headers)
@@ -404,7 +405,7 @@ endfunction
 
 function! s:clients.wget.request(settings) abort
   if has_key(a:settings, 'unixSocket')
-    throw 'vital: Web.HTTP: unixSocket only can be used with the curl.'
+    throw 'vital: Async.HTTP: unixSocket only can be used with the curl.'
   endif
   let quote = s:_quote()
   let command = self._command(a:settings)
@@ -444,7 +445,7 @@ function! s:clients.wget.request(settings) abort
     let command .= ' --post-file=' . quote . a:settings._file.post . quote
   endif
 
-  return s:Process.start(command)
+  return s:Process.start(split(command, ' '))
         \.then({v -> s:_wget_postprocess(v, a:settings,
         \        {
         \          'has' : has_output_file,
@@ -467,7 +468,7 @@ function! s:_wget_postprocess(response, settings, output) abort
     let responses = [[[], '']]
   endif
   if has_key(s:clients.wget.errcode, retcode) && empty(headers)
-    throw 'vital: Web.HTTP: ' . s:clients.wget.errcode[retcode]
+    throw 'vital: Async.HTTP: ' . s:clients.wget.errcode[retcode]
   endif
   if a:output.has
     let content = ''

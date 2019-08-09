@@ -23,7 +23,7 @@ Describe Geo.Location
     Describe .resolveAsync()
       It object resolve async work fine check.
         let obj = Location.new()
-        let promise = obj.resolveAsync(140 ,35)
+        let promise = obj.resolveAsync()
         call Promise.wait(promise)
         Assert NotEquals(obj.status, v:null, 'object result status')
       End

@@ -7,10 +7,12 @@ set cpo&vim
 function! s:_vital_loaded(V) abort
   let s:V    = a:V
   let s:http = s:V.import('Web.HTTP')
+  let s:asynchttp = s:V.import('Async.HTTP')
+  let s:Promise  =  s:V.import('Async.Promise')
 endfunction
 
 function! s:_vital_depends() abort
-  return [ 'Web.HTTP' ]
+  return [ 'Web.HTTP', 'Async.HTTP', 'Async.Promise' ]
 endfunction
 
 let s:Weather = {
@@ -23,6 +25,21 @@ let s:SITE_URL = 'http://wttr.in/'
 
 function! s:new() abort
   return deepcopy(s:Weather)
+endfunction
+
+function! s:Weather.resolveAsync(long,lat) abort
+  let req = s:_request_process(self, {
+        \ 'long' : a:long,
+        \ 'lat'  : a:lat,
+        \})
+
+  let res_promise = s:asynchttp.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param))
+  let msg_promise = s:asynchttp.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt)                                    )
+
+  call res_promise.then({res -> s:_response_process1(self, res)})
+  call msg_promise.then({res -> s:_response_process2(self, res)})
+
+  return s:Promise.all([res_promise, msg_promise])
 endfunction
 
 function! s:Weather.resolve(long,lat) abort

@@ -305,7 +305,7 @@ function! s:clients.curl.request(settings) abort
     let command += [' --unix-socket' , quote . a:settings.unixSocket . quote]
   endif
   let a:settings._file.header = s:_tempname()
-  let command += ['--dump-header' , quote . a:settings._file.header . quote]
+  let command += ['--dump-header' ,  a:settings._file.header]
   let has_output_file = has_key(a:settings, 'outputFile')
   if has_output_file
     let output_file = a:settings.outputFile
@@ -313,7 +313,7 @@ function! s:clients.curl.request(settings) abort
     let output_file = s:_tempname()
     let a:settings._file.content = output_file
   endif
-  let command += ['--output' , quote . output_file . quote]
+  let command += ['--output' ,  output_file]
   if has_key(a:settings, 'gzipDecompress') && a:settings.gzipDecompress
     let command += ['--compressed']
   endif
@@ -345,9 +345,9 @@ function! s:clients.curl.request(settings) abort
   endif
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)
-    let command += ['--data-binary', '@' . quote . a:settings._file.post . quote]
+    let command += ['--data-binary', '@' . a:settings._file.post]
   endif
-  let command += [quote . a:settings.url . quote]
+  let command += [a:settings.url]
 
   return s:Process.start(command)
         \.then({v -> s:_curl_postprocess(v, a:settings,
@@ -420,7 +420,7 @@ function! s:clients.wget.request(settings) abort
     let a:settings.headers['X-HTTP-Method-Override'] = a:settings.method
   endif
   let a:settings._file.header = s:_tempname()
-  let command += ['-o' , quote . a:settings._file.header . quote]
+  let command += ['-o' ,  a:settings._file.header]
   let has_output_file = has_key(a:settings, 'outputFile')
   if has_output_file
     let output_file = a:settings.outputFile
@@ -428,7 +428,7 @@ function! s:clients.wget.request(settings) abort
     let output_file = s:_tempname()
     let a:settings._file.content = output_file
   endif
-  let command += ['-O' , quote . output_file . quote]
+  let command += ['-O' ,  output_file]
   let command += ['--server-response', '-q', '-L']
   let command += ['--max-redirect=' . a:settings.maxRedirect]
   let command += s:_make_header_args(a:settings.headers, '--header=', quote, 1)
@@ -443,7 +443,7 @@ function! s:clients.wget.request(settings) abort
   if has_key(a:settings, 'password')
     let command += ['--http-password=' . quote . escape(a:settings.password, quote) . quote]
   endif
-  let command += [quote . a:settings.url . quote]
+  let command += [ a:settings.url]
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)
     let command += ['--post-file=' . quote . a:settings._file.post . quote]

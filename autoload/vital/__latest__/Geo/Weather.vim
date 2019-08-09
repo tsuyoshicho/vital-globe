@@ -26,45 +26,77 @@ function! s:new() abort
 endfunction
 
 function! s:Weather.resolve(long,lat) abort
+  let req = s:_request_process(self, {
+        \ 'long' : a:long,
+        \ 'lat'  : a:lat,
+        \})
 
-   " c    Weather condition,
-   " C    Weather condition textual name,
-   " h    Humidity,
-   " t    Temperature,
-   " w    Wind,
-   " l    Location,
-   " m    Moonphase,
-   " M    Moonday,
-   " p    precipitation (mm),
-   " P    pressure (hPa),
+  let res = s:http.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param))
+  let msg = s:http.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt)                                    )
 
-   let items =  ['Weather', 'Condition',
-         \ 'Humidity', 'Temperature', 'Wind',
-         \ 'Location', 'Moonphase', 'Moonday',
-         \ 'Precipitation', 'Pressure']
+  call s:_response_process1(self, res)
+  call s:_response_process2(self, msg)
 
+  return self
+endfunction
+
+
+" c    Weather condition,
+" C    Weather condition textual name,
+" h    Humidity,
+" t    Temperature,
+" w    Wind,
+" l    Location,
+" m    Moonphase,
+" M    Moonday,
+" p    precipitation (mm),
+" P    pressure (hPa),
+
+function! s:_request_process(obj, args) abort
   let param = {'format': '%c#%C#%h#%t#%w#%l#%m#%M#%p#%P'}
   let opt = join(['m', 'M', 'Q', '0', 'A', 'T'])
 
-  let location = string(a:lat + 0.0) . ',' . string(a:long + 0.0)
+  let location = string(a:args.lat + 0.0) . ',' . string(a:args.long + 0.0)
 
-  let res = s:http.get(s:SITE_URL . location,  s:http.encodeURIComponent(opt) . '&' . s:http.encodeURI(param))
-  let msg = s:http.get(s:SITE_URL . location,  s:http.encodeURIComponent(opt)                                )
+  return {
+        \ 'param'    : param,
+        \ 'opt'      : opt,
+        \ 'location' : location,
+        \}
+endfunction
 
-  let self.status = v:false
+function! s:_response_process1(obj, res) abort
+  let obj = a:obj
+  let res = a:res
+
+  let items =  ['Weather', 'Condition',
+        \ 'Humidity', 'Temperature', 'Wind',
+        \ 'Location', 'Moonphase', 'Moonday',
+        \ 'Precipitation', 'Pressure']
+
+  let obj.status = v:false
   if res.status == 200
-    let self.status = v:true
-    let self.message = msg.content
+    let obj.status = v:true
 
     let resultraw = split(join(split(res.content, '\n', 0)), '#', 0)
     let result = {}
     for i in range(len(items))
       let result[items[i]] = resultraw[i]
     endfor
-    let self.result = result
+    let obj.result = result
   endif
-  return self
 endfunction
+
+function! s:_response_process2(obj, res) abort
+  let obj = a:obj
+  let res = a:res
+
+  let obj.status = v:false
+  if res.status == 200
+    let obj.message = res.content
+  endif
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

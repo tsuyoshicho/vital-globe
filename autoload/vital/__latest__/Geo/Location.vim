@@ -25,17 +25,30 @@ function! s:new() abort
 endfunction
 
 function! s:Location.resolve() abort
-  let format = 'json'
+  let req = s:_request_process(self, {})
 
-  let res = s:http.get(s:SITE_URL . format)
+  let res = s:http.get(s:SITE_URL . req.location)
 
-  let self.status = v:false
-  let self.res = res
-  if res.status == 200
-    let self.status = v:true
-    let self.result = json_decode(res.content)
-  endif
+  call s:_response_process(self, res)
+
   return self
+endfunction
+
+function! s:_request_process(obj, args) abort
+  let format = 'json'
+  return { 'location' : format }
+endfunction
+
+function! s:_response_process(obj, res) abort
+  let obj = a:obj
+  let res = a:res
+
+  let obj.status = v:false
+  let obj.res = res
+  if res.status == 200
+    let obj.status = v:true
+    let obj.result = json_decode(res.content)
+  endif
 endfunction
 
 let &cpo = s:save_cpo

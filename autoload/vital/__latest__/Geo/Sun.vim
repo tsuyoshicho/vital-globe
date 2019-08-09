@@ -28,12 +28,20 @@ function! s:new() abort
 endfunction
 
 function! s:Sun.resolve(long,lat,...) abort
-  if a:0 > 0
-    let date = a:1
-  else
-    let date = s:date.now()
-  endif
+  let req = s:_request_process(self, {
+        \ 'long' : a:long,
+        \ 'lat'  : a:lat,
+        \ 'date' : (a:0 > 0) ? a:1 : s:date.now(),
+        \})
 
+  let res = s:http.get(s:SITE_URL, s:http.encodeURI(req.param))
+
+  call s:_response_process(self, res)
+
+  return self
+endfunction
+
+function! s:_request_process(obj, args) abort
   let param = {
         \ 'lat'       : 0.0,
         \ 'lng'       : 0.0,
@@ -41,18 +49,23 @@ function! s:Sun.resolve(long,lat,...) abort
         \ 'formatted' : 0,
         \ }
 
-  let param.lng = string(a:long + 0.0)
-  let param.lat = string(a:lat  + 0.0)
+  let param.lng = string(a:args.long + 0.0)
+  let param.lat = string(a:args.lat  + 0.0)
   let param.formatted = 0
-  let param.date = date.format('%F')
+  let param.date = a:args.date.format('%F')
 
-  let res = s:http.get(s:SITE_URL, s:http.encodeURI(param))
+  return { 'param' : param }
+endfunction
 
-  let self.status = v:false
+function! s:_response_process(obj, res) abort
+  let obj = a:obj
+  let res = a:res
+
+  let obj.status = v:false
   if res.status == 200
-    let self.json = json_decode(res.content)
-    if self.json.status is? 'OK'
-      let self.status = v:true
+    let obj.json = json_decode(res.content)
+    if obj.json.status is? 'OK'
+      let obj.status = v:true
 
       let result = {
             \ 'sunrise':    '',
@@ -76,24 +89,22 @@ function! s:Sun.resolve(long,lat,...) abort
             \}
 
       for item in ['sunrise', 'sunset', 'solar_noon']
-        let result[item] = s:date.from_format(self.json.results[item], s:PARSE_UNFORMMATED_DATETIME)
+        let result[item] = s:date.from_format(obj.json.results[item], s:PARSE_UNFORMMATED_DATETIME)
       endfor
 
-      let result.day_length = s:date.delta(self.json.results.day_length, 'second')
+      let result.day_length = s:date.delta(obj.json.results.day_length, 'second')
 
       for typename in ['civil', 'nautical', 'astronomical']
         for item in ['begin', 'end']
           let result.twilight[typename][item] =
-                \ s:date.from_format(self.json.results[typename . '_twilight_' . item],
+                \ s:date.from_format(obj.json.results[typename . '_twilight_' . item],
                 \                    s:PARSE_UNFORMMATED_DATETIME)
         endfor
       endfor
 
-      let self.result = result
+      let obj.result = result
     endif
   endif
-
-  return self
 endfunction
 
 let &cpo = s:save_cpo

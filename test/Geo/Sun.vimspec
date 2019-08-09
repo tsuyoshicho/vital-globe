@@ -3,6 +3,7 @@ Describe Geo.Sun
     let SUN = vital#vital#new().import('Geo.Sun')
     let DateTime = vital#vital#new().import('DateTime')
     let Promise  = vital#vital#new().import('Async.Promise')
+    let Process  = vital#vital#new().import('Async.Promise.Process')
   End
 
   Describe .new()
@@ -35,23 +36,31 @@ Describe Geo.Sun
     End
     Describe .resolveAsync()
       It object resolve async work fine check.
-        let obj = SUN.new()
-        let promise = obj.resolveAsync(140 ,35)
-        call Promise.wait(promise)
-        Assert NotEquals(obj.status, v:null, 'object result status')
+        if Process.is_available()
+          let obj = SUN.new()
+          let promise = obj.resolveAsync(140 ,35)
+          call Promise.wait(promise)
+          Assert NotEquals(obj.status, v:null, 'object result status')
+        else
+          Skip not support
+        endif
       End
       It object resolve async work typical data check.
-        let obj = SUN.new()
-        let promise = obj.resolveAsync(140 ,35, DateTime.from_unix_time(1564617600))
-        call Promise.wait(promise)
-        Assert NotEquals(obj.status, v:null, 'object result status')
+        if Process.is_available()
+          let obj = SUN.new()
+          let promise = obj.resolveAsync(140 ,35, DateTime.from_unix_time(1564617600))
+          call Promise.wait(promise)
+          Assert NotEquals(obj.status, v:null, 'object result status')
 
-        let sunrise = '2019-07-31T19:49:20+00:00'
-        let sunset  = '2019-08-01T09:43:22+00:00'
-        let sunriseobj = DateTime.from_format(sunrise, '%FT%T%z')
-        let sunsetobj  = DateTime.from_format(sunset, '%FT%T%z')
-        Assert Equals(obj.result.sunrise.compare(sunriseobj), 0, "sunrise diff")
-        Assert Equals(obj.result.sunset.compare(sunsetobj)  , 0, "sunset diff" )
+          let sunrise = '2019-07-31T19:49:20+00:00'
+          let sunset  = '2019-08-01T09:43:22+00:00'
+          let sunriseobj = DateTime.from_format(sunrise, '%FT%T%z')
+          let sunsetobj  = DateTime.from_format(sunset, '%FT%T%z')
+          Assert Equals(obj.result.sunrise.compare(sunriseobj), 0, "sunrise diff")
+          Assert Equals(obj.result.sunset.compare(sunsetobj)  , 0, "sunset diff" )
+        else
+          Skip not support
+        endif
       End
     End
   End

@@ -2,6 +2,7 @@ Describe Geo.Location
   Before all
     let Location = vital#vital#new().import('Geo.Location')
     let Promise  = vital#vital#new().import('Async.Promise')
+    let Process  = vital#vital#new().import('Async.Promise.Process')
   End
 
   Describe .new()
@@ -22,10 +23,14 @@ Describe Geo.Location
     End
     Describe .resolveAsync()
       It object resolve async work fine check.
-        let obj = Location.new()
-        let promise = obj.resolveAsync()
-        call Promise.wait(promise)
-        Assert NotEquals(obj.status, v:null, 'object result status')
+        if Process.is_available()
+          let obj = Location.new()
+          let promise = obj.resolveAsync()
+          call Promise.wait(promise)
+          Assert NotEquals(obj.status, v:null, 'object result status')
+        else
+          Skip not support
+        endif
       End
     End
   End

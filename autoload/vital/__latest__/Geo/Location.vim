@@ -7,10 +7,11 @@ set cpo&vim
 function! s:_vital_loaded(V) abort
   let s:V    = a:V
   let s:http = s:V.import('Web.HTTP')
+  let s:asynchttp = s:V.import('Async.HTTP')
 endfunction
 
 function! s:_vital_depends() abort
-  return [ 'Web.HTTP' ]
+  return [ 'Web.HTTP', 'Async.HTTP' ]
 endfunction
 
 let s:Location = {
@@ -22,6 +23,16 @@ let s:SITE_URL = 'https://ifconfig.co/'
 
 function! s:new() abort
   return deepcopy(s:Location)
+endfunction
+
+function! s:Location.resolveAsync() abort
+  let req = s:_request_process(self, {})
+
+  let promise = s:asynchttp.get(s:SITE_URL . req.location)
+
+  call promise.then({res -> s:_response_process(self, res)})
+
+  return promise
 endfunction
 
 function! s:Location.resolve() abort

@@ -1,6 +1,7 @@
 Describe Geo.Location
   Before all
     let Location = vital#vital#new().import('Geo.Location')
+    let Promise  = vital#vital#new().import('Async.Promise')
   End
 
   Describe .new()
@@ -16,6 +17,14 @@ Describe Geo.Location
       It object resolve work fine check.
         let obj = Location.new()
         call obj.resolve()
+        Assert NotEquals(obj.status, v:null, 'object result status')
+      End
+    End
+    Describe .resolveAsync()
+      It object resolve async work fine check.
+        let obj = Location.new()
+        let promise = obj.resolveAsync(140 ,35)
+        call Promise.wait(promise)
         Assert NotEquals(obj.status, v:null, 'object result status')
       End
     End

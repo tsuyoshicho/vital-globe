@@ -8,10 +8,11 @@ function! s:_vital_loaded(V) abort
   let s:V    = a:V
   let s:http = s:V.import('Web.HTTP')
   let s:date = s:V.import('DateTime')
+  let s:asynchttp = s:V.import('Async.HTTP')
 endfunction
 
 function! s:_vital_depends() abort
-  return [ 'Web.HTTP', 'DateTime' ]
+  return [ 'Web.HTTP', 'DateTime', 'Async.HTTP' ]
 endfunction
 
 let s:Sun = {
@@ -25,6 +26,20 @@ let s:PARSE_UNFORMMATED_DATETIME = '%FT%T%z'
 
 function! s:new() abort
   return deepcopy(s:Sun)
+endfunction
+
+function! s:Sun.resolveAsync(long,lat,...) abort
+  let req = s:_request_process(self, {
+        \ 'long' : a:long,
+        \ 'lat'  : a:lat,
+        \ 'date' : (a:0 > 0) ? a:1 : s:date.now(),
+        \})
+
+  let promise = s:asynchttp.get(s:SITE_URL, s:http.encodeURI(req.param))
+
+  call promise.then({res -> s:_response_process(self, res)})
+
+  return promise
 endfunction
 
 function! s:Sun.resolve(long,lat,...) abort

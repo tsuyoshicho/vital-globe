@@ -42,7 +42,7 @@ This object has below:
 
 result data is:
 - ip          : IP Address (IPv4 or IPv6)
-- ip_decimal  : IP Address)(decimal format)
+- ip_decimal  : IP Address (decimal format)
 - country     : Country name
 - country_eu  : Country in EU? |v:true| or |v:false|
 - country_iso : ISO Country Code
@@ -57,6 +57,20 @@ result data is:
 {location}.resolve()
 
 	Resolve location at current {ip address}.
+
+					*Vital.Geo.Location-Location.resolveAsync()*
+{location}.resolveAsync()
+
+	Resolve location at current {ip address}.
+	This function return |Vital.Async.Promise| object.
+	If it is resolved. promise is resolved status and chain method call
+	with args at {location} object.
+	e.g.: >
+      let promise = loc.resolveAsync()
+      call promise.then({ loc -> foo(loc) })
+      call s:Promise.wait(promise)
+      " Wait for complete reolving. and process then lambda.
+<
 
 
 ==============================================================================

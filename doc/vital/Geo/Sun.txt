@@ -65,5 +65,22 @@ result data is:
 	{date}'s sunset/sunrize.
 
 
+					*Vital.Geo.Sun-Sun.resolveAsync()*
+{sun}.resolveAsync({longitude}, {latitude}, [{date}])
+
+	Resolve sunset/sunrise at {longitude}, {latitude}.
+	If add {date} at |Vital.DateTime-DateTime| object, resolve target
+	{date}'s sunset/sunrize.
+	This function return |Vital.Async.Promise| object.
+	If it is resolved. promise is resolved status and chain method call
+	with args at {sun} object.
+	e.g.: >
+      let promise = sun.resolveAsync(long,lat)
+      call promise.then({ sun -> foo(sun) })
+      call s:Promise.wait(promise)
+      " Wait for complete reolving. and process then lambda.
+<
+
+
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

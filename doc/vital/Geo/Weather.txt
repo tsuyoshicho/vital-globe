@@ -63,5 +63,20 @@ result data is:
 	Resolve weather at {longitude}, {latitude}.
 
 
+					*Vital.Geo.Weather-Weather.resolveAsync()*
+{weather}.resolveAsync({longitude}, {latitude})
+
+	Resolve weather at {longitude}, {latitude}.
+	This function return |Vital.Async.Promise| object.
+	If it is resolved. promise is resolved status and chain method call
+	with args at {weather} object.
+	e.g.: >
+      let promise = weather.resolveAsync(long,lat)
+      call promise.then({ weather -> foo(weather) })
+      call s:Promise.wait(promise)
+      " Wait for complete reolving. and process then lambda.
+<
+
+
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

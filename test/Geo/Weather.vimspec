@@ -1,6 +1,8 @@
 Describe Geo.Weather
   Before all
     let Weather = vital#vital#new().import('Geo.Weather')
+    let Promise = vital#vital#new().import('Async.Promise')
+    let Process = vital#vital#new().import('Async.Promise.Process')
   End
 
   Describe .new()
@@ -17,6 +19,18 @@ Describe Geo.Weather
         let obj = Weather.new()
         call obj.resolve(140 ,35)
         Assert NotEquals(obj.status, v:null, 'object result status')
+      End
+    End
+    Describe .resolveAsync()
+      It object resolve async work fine check.
+        if Process.is_available()
+          let obj = Weather.new()
+          let promise = obj.resolveAsync(140 ,35)
+          call Promise.wait(promise)
+          Assert NotEquals(obj.status, v:null, 'object result status')
+        else
+          Skip not support
+        endif
       End
     End
   End

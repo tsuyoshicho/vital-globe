@@ -1,0 +1,71 @@
+*vital/Async.HTTP.txt*	simple HTTP async client library.
+
+Maintainer: Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
+
+==============================================================================
+CONTENTS				*Vital.Async.HTTP-contents*
+
+INTRODUCTION				|Vital.Async.HTTP-introduction|
+INTERFACE				|Vital.Async.HTTP-interface|
+  Functions				|Vital.Async.HTTP-functions|
+  Response				|Vital.Async.HTTP-response|
+
+==============================================================================
+INTRODUCTION				*Vital.Async.HTTP-introduction*
+
+*Vital.Async.HTTP* is an HTTP Utilities Library.  It provides a simple HTTP
+async client.
+
+Based on |Vital.Web.HTTP|.
+
+==============================================================================
+INTERFACE				*Vital.Async.HTTP-interface*
+------------------------------------------------------------------------------
+FUNCTIONS				*Vital.Async.HTTP-functions*
+
+get({url} [, {param} [, {header}]])	*Vital.Async.HTTP.get()*
+	Send a GET request to the server.
+	This is just a wrapper of |Vital.Async.HTTP.request()|.
+
+post({url} [, {param} [, {header}]])	*Vital.Async.HTTP.post()*
+	Send a POST request to the server.
+	This is just a wrapper of |Vital.Async.HTTP.request()|.
+
+request({settings})			*Vital.Async.HTTP.request()*
+request({url} [, {settings}])
+request({method}, {url} [, {settings}])
+	Send a request to the server.
+	This function requires one of the clients, "curl" or "wget".
+	{settings} is a |Dictionary| which contains same as
+	|Vital.Web.HTTP.request()|.
+	NOTE:Limitation; client do not support "Python"
+
+------------------------------------------------------------------------------
+RESPONSE				*Vital.Async.HTTP-response*
+
+|Vital.Async.HTTP.request()|, |Vital.Async.HTTP.get()|, and |Vital.Async.HTTP.post()|
+return |Vital.Async.Promise| object.
+If it is complete. promise is resolved HTTP access and chain method call
+with args at data structure as |Directory| like |Vital.Web.HTTP-response|
+
+
+------------------------------------------------------------------------------
+CLIENT					*Vital.Async.HTTP-client*
+
+The following can be used.
+(TODO: More document.  Especially about limitation.)
+
+curl					*Vital.Async.HTTP-client-curl*
+	Use curl command.
+
+	http://curl.haxx.se/
+
+wget					*Vital.Async.HTTP-client-wget*
+	Use wget command.
+
+	http://www.gnu.org/software/wget/
+
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

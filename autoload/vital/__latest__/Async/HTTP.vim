@@ -302,7 +302,7 @@ function! s:clients.curl.request(settings) abort
   let quote = s:_quote()
   let command = [self._command(a:settings)]
   if has_key(a:settings, 'unixSocket')
-    let command += [' --unix-socket' , quote . a:settings.unixSocket . quote]
+    let command += [' --unix-socket' , a:settings.unixSocket]
   endif
   let a:settings._file.header = s:_tempname()
   let command += ['--dump-header' ,  a:settings._file.header]
@@ -341,7 +341,7 @@ function! s:clients.curl.request(settings) abort
     else
       let method = 'anyauth'
     endif
-    let command += ['--' . method , '--user' , quote . auth . quote]
+    let command += ['--' . method , '--user' , auth]
   endif
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)

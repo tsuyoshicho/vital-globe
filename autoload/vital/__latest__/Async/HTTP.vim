@@ -68,7 +68,7 @@ function! s:_request_response(responses, defer) abort
   call a:defer.resolve(result)
 endfunction
 
-function! s:_request_finally(settings)
+function! s:_request_finally(settings) abort
   let settings = a:settings
   for file in values(settings._file)
     if filereadable(file)

@@ -343,9 +343,9 @@ function! s:clients.curl.request(settings) abort
     endif
     let command += ['--' . method , '--user' , auth]
   endif
-  if has_key(a:settings, 'token')
+  if has_key(a:settings, 'bearerToken')
         \ && has_key(a:settings, 'authMethod') && (a:settings.authMethod ==? 'oauth2')
-    let command += ['--oauth2-bearer'  , quote . a:settings.token . quote]
+    let command += ['--oauth2-bearer'  , quote . a:settings.bearerToken . quote]
   endif
   if has_key(a:settings, 'data')
     let a:settings._file.post = s:_make_postfile(a:settings.data)
@@ -447,8 +447,8 @@ function! s:clients.wget.request(settings) abort
   if has_key(a:settings, 'password')
     let command += ['--http-password=' . quote . escape(a:settings.password, quote) . quote]
   endif
-  if has_key(a:settings, 'token')
-    let command += ['--header=' . quote . 'Authorization: Bearer ' . a:settings.token . quote]
+  if has_key(a:settings, 'bearerToken')
+    let command += ['--header=' . quote . 'Authorization: Bearer ' . a:settings.bearerToken . quote]
   endif
   let command += [ a:settings.url]
   if has_key(a:settings, 'data')

@@ -1,4 +1,4 @@
-# vital-globe [![Build Status](https://travis-ci.com/tsuyoshicho/vital-globe.svg?branch=master)](https://travis-ci.com/tsuyoshicho/vital-globe) [![Build status](https://ci.appveyor.com/api/projects/status/xmqcn4yo8a8gutxq/branch/master?svg=true)](https://ci.appveyor.com/project/tsuyoshicho/vital-globe/branch/master) [![codecov](https://codecov.io/gh/tsuyoshicho/vital-globe/branch/master/graph/badge.svg)](https://codecov.io/gh/tsuyoshicho/vital-globe)
+# vital-globe [![Matrix Test status](https://github.com/tsuyoshicho/vital-globe/workflows/build%20and%20test%20at%20vim/badge.svg)](https://github.com/tsuyoshicho/vital-globe/actions) [![codecov](https://codecov.io/gh/tsuyoshicho/vital-globe/branch/master/graph/badge.svg)](https://codecov.io/gh/tsuyoshicho/vital-globe)
 ## Timer misc API
 
 - Cron like table defined event manage.

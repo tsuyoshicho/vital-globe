@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vim documentation: vital/Geo/Sun</title>
+<meta name="Generator" content="Vim/8.2">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="help">
+<meta name="settings" content="no_progress,ignore_folding,use_css,no_foldcolumn,expand_tabs,ignore_conceal,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="github">
+<style>
+<!--
+.MissingTag { background-color: black; color: white; }
+.EnglishTag { background-color: gray; color: white; }
+pre { font-family: monospace; color: #24292e; background-color: #ffffff; }
+body { font-family: monospace; color: #24292e; background-color: #ffffff; }
+* { font-size: 1em; }
+.PreProc { color: #d73a49; }
+.helpExample { font-weight: bold; }
+.String { color: #032f62; }
+.Special { color: #6f42c1; }
+.Ignore { color: #babbbc; background-color: #ffffff; padding-bottom: 1px; }
+.Statement { color: #d73a49; }
+-->
+</style>
+</head>
+<body>
+
+<a name="top"></a><h1>Vim documentation: vital/Geo/Sun</h1>
+<a href="./../../index.html">main help file</a>
+<hr>
+<pre id='vimCodeElement'>
+<a class="String" href="./../../vital/Geo/Sun.html" name="vital/Geo/Sun.txt">vital/Geo/Sun.txt</a>     Utilities for Sunset/Sunrize and other
+
+Maintainer: Tsuyoshi CHO &lt;Tsuyoshi.CHO+develop@Gmail.com&gt;
+
+<span class="PreProc">==============================================================================</span>
+<span class="Statement">CONTENTS</span>                                <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-contents" name="Vital.Geo.Sun-contents">Vital.Geo.Sun-contents</a>
+
+INTRODUCTION                    <a class="Identifier" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-introduction">Vital.Geo.Sun-introduction</a>
+FUNCTIONS                       <a class="Identifier" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-functions">Vital.Geo.Sun-functions</a>
+OBJECTS                         <a class="Identifier" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-objects">Vital.Geo.Sun-objects</a>
+  Sun Object                    <a class="Identifier" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-objects-Sun">Vital.Geo.Sun-objects-Sun</a>
+
+
+<span class="PreProc">==============================================================================</span>
+<span class="Statement">INTRODUCTION</span>                            <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-introduction" name="Vital.Geo.Sun-introduction">Vital.Geo.Sun-introduction</a>
+
+<a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun" name="Vital.Geo.Sun">Vital.Geo.Sun</a> is a library that is sunset/sunrise and others time of day.
+
+Sunset and sunrise times for any location - Free calendars and calculator:
+<span class="String"><a href="https://sunrise-sunset.org/">https://sunrise-sunset.org/</a></span>
+
+<span class="PreProc">==============================================================================</span>
+<span class="Statement">FUNCTIONS</span>                               <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-functions" name="Vital.Geo.Sun-functions">Vital.Geo.Sun-functions</a>
+
+new()                                   <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun.new()" name="Vital.Geo.Sun.new()">Vital.Geo.Sun.new()</a>
+
+        Creates a new Sun object.
+
+
+<span class="PreProc">==============================================================================</span>
+<span class="Statement">OBJECTS</span>                                 <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-objects" name="Vital.Geo.Sun-objects">Vital.Geo.Sun-objects</a>
+
+<span class="PreProc">------------------------------------------------------------------------------</span>
+Sun Object                              <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-objects-Sun" name="Vital.Geo.Sun-objects-Sun">Vital.Geo.Sun-objects-Sun</a>
+
+Sun object has the following data after resolving the API request/response
+process.
+
+This object has below:
+- status : <a href="https://www.google.com/search?q=vim+%22v:null%22&lr=lang_en"><span class="MissingTag">v:null</span></a>(unresolved) or <a href="https://www.google.com/search?q=vim+%22v:false%22&lr=lang_en"><span class="MissingTag">v:false</span></a>(failure) or <a href="https://www.google.com/search?q=vim+%22v:true%22&lr=lang_en"><span class="MissingTag">v:true</span></a>(success)
+- result : see below
+- json   : raw response json data.
+
+result data is:
+- sunrise        : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+- sunset         : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+- solar_noon     : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+- day_length     : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-TimeDelta%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-TimeDelta</span></a> object
+- twilight
+  - civil
+    -begin       : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+    -end         : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+  - nautical
+    - begin      : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+    - end        : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+  - astronomical
+    - begin      : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+    - end        : <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object
+
+                                        <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-Sun.resolve()" name="Vital.Geo.Sun-Sun.resolve()">Vital.Geo.Sun-Sun.resolve()</a>
+<span class="Special">{sun}</span>.resolve(<span class="Special">{longitude}</span>, <span class="Special">{latitude}</span>, [<span class="Special">{date}</span>])
+
+        Resolve sunset/sunrise at <span class="Special">{longitude}</span>, <span class="Special">{latitude}</span>.
+        If add <span class="Special">{date}</span> at <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object, resolve target
+        <span class="Special">{date}</span>'s sunset/sunrize.
+
+
+                                        <a class="String" href="./../../vital/Geo/Sun.html#Vital.Geo.Sun-Sun.resolveAsync()" name="Vital.Geo.Sun-Sun.resolveAsync()">Vital.Geo.Sun-Sun.resolveAsync()</a>
+<span class="Special">{sun}</span>.resolveAsync(<span class="Special">{longitude}</span>, <span class="Special">{latitude}</span>, [<span class="Special">{date}</span>])
+
+        Resolve sunset/sunrise at <span class="Special">{longitude}</span>, <span class="Special">{latitude}</span>.
+        If add <span class="Special">{date}</span> at <a href="https://www.google.com/search?q=vim+%22Vital.DateTime-DateTime%22&lr=lang_en"><span class="MissingTag">Vital.DateTime-DateTime</span></a> object, resolve target
+        <span class="Special">{date}</span>'s sunset/sunrize.
+        This function return <a href="https://www.google.com/search?q=vim+%22Vital.Async.Promise%22&lr=lang_en"><span class="MissingTag">Vital.Async.Promise</span></a> object.
+        If it is resolved. promise is resolved status and chain method call
+        with args at <span class="Special">{sun}</span> object.
+        e.g.:
+<span class="helpExample">      let promise = sun.resolveAsync(long,lat)</span>
+<span class="helpExample">      call promise.then({ sun -&gt; foo(sun) })</span>
+<span class="helpExample">      call s:Promise.wait(promise)</span>
+<span class="helpExample">      &quot; Wait for complete reolving. and process then lambda.</span>
+
+
+
+<span class="PreProc">==============================================================================</span>
+vim&#0058;tw=78:fo=tcq2mM:ts=8:ft=help:norl
+</pre>
+<hr>
+<a href="#top">top</a> - <a href="./../../index.html">main help file</a> - <a href="./../../tags.html">tag index</a> <br>
+
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

@@ -1,0 +1,64 @@
+name: reviewdog
+on: [push, pull_request]
+jobs:
+  vint:
+    name: runner / vint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code.
+        uses: actions/checkout@v2
+      - name: vint
+        uses: reviewdog/action-vint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+      - name: vint-pr-review
+        uses: reviewdog/action-vint@v1
+        if: github.event_name == 'pull_request'
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+  vimlint:
+    name: runner / vimlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code.
+        uses: actions/checkout@v2
+      - name: vimlint
+        uses: tsuyoshicho/action-vimlint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+      - name: vimlint-pr-review
+        uses: tsuyoshicho/action-vimlint@v1
+        if: github.event_name == 'pull_request'
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+  misspell:
+    name: runner / misspell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code.
+        uses: actions/checkout@v2
+      - name: misspell-pr-review
+        uses: reviewdog/action-misspell@v1
+        if: github.event_name == 'pull_request'
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          locale: "US"
+  vital-throw-message:
+    name: runner / vital-throw-message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code.
+        uses: actions/checkout@v2
+      - name: vital-throw-message
+        uses: ./.github/actions/vital-throw-message
+        with:
+          github_token: ${{ secrets.github_token }}
+      - name: vital-throw-message-pr-review
+        uses: ./.github/actions/vital-throw-message
+        if: github.event_name == 'pull_request'
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review

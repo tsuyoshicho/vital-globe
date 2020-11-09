@@ -75,12 +75,13 @@ jobs:
           THEMIS_VIM: ${{ steps.vim.outputs.executable }}
           THEMIS_PROFILE: ${{ github.workspace }}/vim-profile-${{ runner.os }}-${{ matrix.vim }}-${{ matrix.type }}.txt
         run: |
-          git clone --depth 1 --branch ${THEMIS_VERSION} --single-branch https://github.com/thinca/vim-themis  ${GITHUB_WORKSPACE}/vim-themis
-          git clone --depth 1                            --single-branch https://github.com/vim-jp/vital.vim   ${GITHUB_WORKSPACE}/vital.vim
-          git clone --depth 1                                            https://github.com/Shougo/vimproc.vim ${GITHUB_WORKSPACE}/vimproc
+          git clone --depth 1 --branch ${THEMIS_VERSION} --single-branch https://github.com/thinca/vim-themis            ${GITHUB_WORKSPACE}/vim-themis
+          git clone --depth 1                            --single-branch https://github.com/vim-jp/vital.vim             ${GITHUB_WORKSPACE}/vital.vim
+          git clone --depth 1                            --single-branch https://github.com/lambdalisue/vital-Whisky.git ${GITHUB_WORKSPACE}/vital.Whisky
+          git clone --depth 1                                            https://github.com/Shougo/vimproc.vim           ${GITHUB_WORKSPACE}/vimproc
           (cd ${GITHUB_WORKSPACE}/vimproc && make)
           ${THEMIS_VIM} --version
-          ${GITHUB_WORKSPACE}/vim-themis/bin/themis --runtimepath ${GITHUB_WORKSPACE}/vimproc --runtimepath ${GITHUB_WORKSPACE}/vital.vim --exclude ConcurrentProcess --reporter dot
+          ${GITHUB_WORKSPACE}/vim-themis/bin/themis --runtimepath ${GITHUB_WORKSPACE}/vimproc --runtimepath ${GITHUB_WORKSPACE}/vital.vim --runtimepath ${GITHUB_WORKSPACE}/vital.Whisky --exclude ConcurrentProcess --reporter dot
       - name: Collect coverage
         env:
           THEMIS_PROFILE: ${{ github.workspace }}/vim-profile-${{ runner.os }}-${{ matrix.vim }}-${{ matrix.type }}.txt
@@ -164,9 +165,10 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          git -c advice.detachedHead=false clone https://github.com/thinca/vim-themis  --quiet --branch ${Env:THEMIS_VERSION} --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vim-themis
-          git -c advice.detachedHead=false clone https://github.com/vim-jp/vital.vim   --quiet                                --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vital.vim
-          git -c advice.detachedHead=false clone https://github.com/Shougo/vimproc.vim --quiet --branch ver.9.2               --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vimproc
+          git -c advice.detachedHead=false clone https://github.com/thinca/vim-themis            --quiet --branch ${Env:THEMIS_VERSION} --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vim-themis
+          git -c advice.detachedHead=false clone https://github.com/vim-jp/vital.vim             --quiet                                --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vital.vim
+          git -c advice.detachedHead=false clone https://github.com/lambdalisue/vital-Whisky.git --quiet                                --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vital.Whisky
+          git -c advice.detachedHead=false clone https://github.com/Shougo/vimproc.vim           --quiet --branch ver.9.2               --single-branch --depth 1 ${Env:GITHUB_WORKSPACE}\vimproc
           Invoke-WebRequest -Uri "https://github.com/Shougo/vimproc.vim/releases/download/ver.9.2/vimproc_win64.dll" -OutFile "${Env:GITHUB_WORKSPACE}\vimproc\lib\vimproc_win64.dll"
       - name: Run test
         env:
@@ -178,7 +180,7 @@ jobs:
           set TMP=%TEMP%
           mkdir %TEMP%
           %THEMIS_VIM% --version
-          %GITHUB_WORKSPACE%\vim-themis\bin\themis.bat --runtimepath %GITHUB_WORKSPACE%\vimproc --runtimepath %GITHUB_WORKSPACE%\vital.vim --exclude ConcurrentProcess --reporter dot
+          %GITHUB_WORKSPACE%\vim-themis\bin\themis.bat --runtimepath %GITHUB_WORKSPACE%\vimproc --runtimepath %GITHUB_WORKSPACE%\vital.vim --runtimepath %GITHUB_WORKSPACE%\vital.Whisky --exclude ConcurrentProcess --reporter dot
       - name: Collect coverage
         env:
           THEMIS_PROFILE: ${{ github.workspace }}/vim-profile-${{ runner.os }}-${{ matrix.vim }}-${{ matrix.type }}.txt

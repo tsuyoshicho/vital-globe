@@ -7,7 +7,7 @@ Describe Geo.Location
 
   Describe .new()
     It object creation check.
-      let obj = Location.new(['curl'])
+      let obj = Location.new(['wget', 'curl'])
       Assert NotEquals(obj, v:null, 'create object')
       Assert Equals(type(obj), type({}), 'create object type')
     End
@@ -16,7 +16,7 @@ Describe Geo.Location
   Context Location object
     Describe .resolve()
       It object resolve work fine check.
-        let obj = Location.new(['curl'])
+        let obj = Location.new(['wget', 'curl'])
         call obj.resolve()
         Assert NotEquals(obj.status, v:null, 'object result status')
       End
@@ -24,7 +24,7 @@ Describe Geo.Location
     Describe .resolveAsync()
       It object resolve async work fine check.
         if Process.is_available()
-          let obj = Location.new(['curl'])
+          let obj = Location.new(['wget', 'curl'])
           let promise = obj.resolveAsync()
           call Promise.wait(promise)
           Assert NotEquals(obj.status, v:null, 'object result status')

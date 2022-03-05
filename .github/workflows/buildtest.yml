@@ -98,9 +98,10 @@ jobs:
       - name: Build vimproc
         run: |
           make -C ${GITHUB_WORKSPACE}/vimproc
-      - name: Setup curl
+      - name: Setup curl & wget
         run: |
           curl --version
+          wget --version
       - name: Run test
         env:
           THEMIS_VIM: ${{ steps.vim.outputs.executable }}
@@ -218,11 +219,12 @@ jobs:
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://github.com/Shougo/vimproc.vim/releases/download/${Env:VIMPROC_VERSION}/vimproc_win64.dll" -OutFile "${Env:GITHUB_WORKSPACE}\vimproc\lib\vimproc_win64.dll"
-      - name: Setup curl
+      - name: Setup curl & wget
         shell: pwsh
         run: |
-          choco install curl -y --no-progress
+          choco install curl wget -y --no-progress
           curl --version
+          wget --version
       - name: Run test
         env:
           THEMIS_VIM: ${{ steps.vim.outputs.executable }}

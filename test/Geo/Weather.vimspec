@@ -7,7 +7,7 @@ Describe Geo.Weather
 
   Describe .new()
     It object creation check.
-      let obj = Weather.new(['curl'])
+      let obj = Weather.new(['wget', 'curl'])
       Assert NotEquals(obj, v:null, 'create object')
       Assert Equals(type(obj), type({}), 'create object type')
     End
@@ -16,7 +16,7 @@ Describe Geo.Weather
   Context Weather object
     Describe .resolve()
       It object resolve work fine check.
-        let obj = Weather.new(['curl'])
+        let obj = Weather.new(['wget', 'curl'])
         call obj.resolve(140 ,35)
         Assert NotEquals(obj.status, v:null, 'object result status')
       End
@@ -24,7 +24,7 @@ Describe Geo.Weather
     Describe .resolveAsync()
       It object resolve async work fine check.
         if Process.is_available()
-          let obj = Weather.new(['curl'])
+          let obj = Weather.new(['wget', 'curl'])
           let promise = obj.resolveAsync(140 ,35)
           call Promise.wait(promise)
           Assert NotEquals(obj.status, v:null, 'object result status')

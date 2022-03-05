@@ -21,14 +21,23 @@ let s:Location = {
 
 let s:SITE_URL = 'https://ifconfig.co/'
 
-function! s:new() abort
-  return deepcopy(s:Location)
+function! s:new(...) abort
+  let obj = deepcopy(s:Location)
+  if a:0 > 0
+    let obj['client'] = a:1
+  endif
+  return obj
 endfunction
 
 function! s:Location.resolveAsync() abort
   let req = s:_request_process(self, {})
 
-  let promise = s:asynchttp.get(s:SITE_URL . req.location)
+  let settings = {}
+  if has_key(self, 'client')
+    let settings['client'] = self.client
+  endif
+
+  let promise = s:asynchttp.request(s:SITE_URL . req.location, settings)
 
   call promise.then({res -> s:_response_process(self, res)})
 
@@ -38,7 +47,12 @@ endfunction
 function! s:Location.resolve() abort
   let req = s:_request_process(self, {})
 
-  let res = s:http.get(s:SITE_URL . req.location)
+  let settings = {}
+  if has_key(self, 'client')
+    let settings['client'] = self.client
+  endif
+
+  let res = s:http.request(s:SITE_URL . req.location, settings)
 
   call s:_response_process(self, res)
 

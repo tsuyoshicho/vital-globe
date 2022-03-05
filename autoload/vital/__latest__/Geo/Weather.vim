@@ -21,7 +21,7 @@ let s:Weather = {
       \ 'message' : [],
       \}
 
-let s:SITE_URL = 'http://wttr.in/'
+let s:SITE_URL = 'https://wttr.in/'
 
 function! s:new() abort
   return deepcopy(s:Weather)

@@ -24,8 +24,12 @@ let s:Sun = {
 let s:SITE_URL = 'https://api.sunrise-sunset.org/json'
 let s:PARSE_UNFORMMATED_DATETIME = '%FT%T%z'
 
-function! s:new() abort
-  return deepcopy(s:Sun)
+function! s:new(...) abort
+  let obj = deepcopy(s:Sun)
+  if a:0 > 0
+    let obj['client'] = a:1
+  endif
+  return obj
 endfunction
 
 function! s:Sun.resolveAsync(long,lat,...) abort
@@ -35,7 +39,13 @@ function! s:Sun.resolveAsync(long,lat,...) abort
         \ 'date' : (a:0 > 0) ? a:1 : s:date.now(),
         \})
 
-  let promise = s:asynchttp.get(s:SITE_URL, s:http.encodeURI(req.param))
+  let settings = {}
+  if has_key(self, 'client')
+    let settings['client'] = self.client
+  endif
+  let settings['param'] = req.param
+
+  let promise = s:asynchttp.request(s:SITE_URL, settings)
 
   call promise.then({res -> s:_response_process(self, res)})
 
@@ -49,7 +59,13 @@ function! s:Sun.resolve(long,lat,...) abort
         \ 'date' : (a:0 > 0) ? a:1 : s:date.now(),
         \})
 
-  let res = s:http.get(s:SITE_URL, s:http.encodeURI(req.param))
+  let settings = {}
+  if has_key(self, 'client')
+    let settings['client'] = self.client
+  endif
+  let settings['param'] = req.param
+
+  let res = s:http.request(s:SITE_URL, settings)
 
   call s:_response_process(self, res)
 

@@ -1,6 +1,6 @@
 Describe Geo.Sun
   Before all
-    let SUN = vital#vital#new().import('Geo.Sun')
+    let Sun = vital#vital#new().import('Geo.Sun')
     let DateTime = vital#vital#new().import('DateTime')
     let Promise  = vital#vital#new().import('Async.Promise')
     let Process  = vital#vital#new().import('Async.Promise.Process')
@@ -8,7 +8,7 @@ Describe Geo.Sun
 
   Describe .new()
     It object creation check.
-      let obj = SUN.new()
+      let obj = Sun.new(['curl'])
       Assert NotEquals(obj, v:null, 'create object')
       Assert Equals(type(obj), type({}), 'create object type')
     End
@@ -17,12 +17,12 @@ Describe Geo.Sun
   Context Sun object
     Describe .resolve()
       It object resolve work fine check.
-        let obj = SUN.new()
+        let obj = Sun.new(['curl'])
         call obj.resolve(140 ,35)
         Assert NotEquals(obj.status, v:null, 'object result status')
       End
       It object resolve work typical data check.
-        let obj = SUN.new()
+        let obj = Sun.new(['curl'])
         " 1564617600 = 2019-08-01T00:00:00+09:00
         call obj.resolve(140 ,35, DateTime.from_unix_time(1564617600))
         Assert NotEquals(obj.status, v:null, 'object result status')
@@ -39,7 +39,7 @@ Describe Geo.Sun
     Describe .resolveAsync()
       It object resolve async work fine check.
         if Process.is_available()
-          let obj = SUN.new()
+          let obj = Sun.new(['curl'])
           let promise = obj.resolveAsync(140 ,35)
           call Promise.wait(promise)
           Assert NotEquals(obj.status, v:null, 'object result status')
@@ -49,8 +49,8 @@ Describe Geo.Sun
       End
       It object resolve async work typical data check.
         if Process.is_available()
-          let obj = SUN.new()
-        " 1564617600 = 2019-08-01T00:00:00+09:00
+          let obj = Sun.new(['curl'])
+          " 1564617600 = 2019-08-01T00:00:00+09:00
           let promise = obj.resolveAsync(140 ,35, DateTime.from_unix_time(1564617600))
           call Promise.wait(promise)
           Assert NotEquals(obj.status, v:null, 'object result status')

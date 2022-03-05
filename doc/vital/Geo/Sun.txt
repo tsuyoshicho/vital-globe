@@ -22,9 +22,12 @@ https://sunrise-sunset.org/
 ==============================================================================
 FUNCTIONS				*Vital.Geo.Sun-functions*
 
-new()					*Vital.Geo.Sun.new()*
+new([{client}])				*Vital.Geo.Sun.new()*
 
 	Creates a new Sun object.
+	If {client} specified, overwrite inner HTTP settings.
+	{client} is a |List| same as |Vital.Web.HTTP.request()| - {settings} -
+	"client" parameter.
 
 
 ==============================================================================

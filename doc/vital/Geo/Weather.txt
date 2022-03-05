@@ -20,14 +20,17 @@ chubin/wttr.in: The right way to check the weather
 https://github.com/chubin/wttr.in
 
 Service URL
-http://wttr.in/
+https://wttr.in/
 
 ==============================================================================
 FUNCTIONS				*Vital.Geo.Weather-functions*
 
-new()					*Vital.Geo.Weather.new()*
+new([{client}])				*Vital.Geo.Weather.new()*
 
 	Creates a new Weather object.
+	If {client} specified, overwrite inner HTTP settings.
+	{client} is a |List| same as |Vital.Web.HTTP.request()| - {settings} -
+	"client" parameter.
 
 
 ==============================================================================

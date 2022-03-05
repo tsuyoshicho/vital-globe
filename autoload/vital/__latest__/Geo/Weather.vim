@@ -23,8 +23,12 @@ let s:Weather = {
 
 let s:SITE_URL = 'https://wttr.in/'
 
-function! s:new() abort
-  return deepcopy(s:Weather)
+function! s:new(...) abort
+  let obj = deepcopy(s:Weather)
+  if a:0 > 0
+    let obj['client'] = a:1
+  endif
+  return obj
 endfunction
 
 function! s:Weather.resolveAsync(long,lat) abort
@@ -33,8 +37,17 @@ function! s:Weather.resolveAsync(long,lat) abort
         \ 'lat'  : a:lat,
         \})
 
-  let res_promise = s:asynchttp.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param))
-  let msg_promise = s:asynchttp.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt)                                    )
+  let settings1 = {}
+  if has_key(self, 'client')
+    let settings1['client'] = self.client
+  endif
+  let settings2 = deepcopy(settings1)
+
+  let settings1['param'] = s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param)
+  let settings2['param'] = s:http.encodeURIComponent(req.opt)
+
+  let res_promise = s:asynchttp.request(s:SITE_URL . req.location, settings1)
+  let msg_promise = s:asynchttp.request(s:SITE_URL . req.location, settings2)
 
   call res_promise.then({res -> s:_response_process1(self, res)})
   call msg_promise.then({res -> s:_response_process2(self, res)})
@@ -48,8 +61,17 @@ function! s:Weather.resolve(long,lat) abort
         \ 'lat'  : a:lat,
         \})
 
-  let res = s:http.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param))
-  let msg = s:http.get(s:SITE_URL . req.location,  s:http.encodeURIComponent(req.opt)                                    )
+  let settings1 = {}
+  if has_key(self, 'client')
+    let settings1['client'] = self.client
+  endif
+  let settings2 = deepcopy(settings1)
+
+  let settings1['param'] = s:http.encodeURIComponent(req.opt) . '&' . s:http.encodeURI(req.param)
+  let settings2['param'] = s:http.encodeURIComponent(req.opt)
+
+  let res = s:http.request(s:SITE_URL . req.location, settings1)
+  let msg = s:http.request(s:SITE_URL . req.location, settings2)
 
   call s:_response_process1(self, res)
   call s:_response_process2(self, msg)

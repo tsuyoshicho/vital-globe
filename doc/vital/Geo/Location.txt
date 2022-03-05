@@ -22,9 +22,12 @@ https://ifconfig.co/
 ==============================================================================
 FUNCTIONS				*Vital.Geo.Location-functions*
 
-new()					*Vital.Geo.Location.new()*
+new([{client}])				*Vital.Geo.Location.new()*
 
 	Creates a new Location object.
+ 	If {client} specified, overwrite inner HTTP settings.
+	{client} is a |List| same as |Vital.Web.HTTP.request()| - {settings} -
+	"client" parameter.
 
 
 ==============================================================================

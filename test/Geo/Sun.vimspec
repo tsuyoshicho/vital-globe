@@ -23,11 +23,13 @@ Describe Geo.Sun
       End
       It object resolve work typical data check.
         let obj = SUN.new()
+        " 1564617600 = 2019-08-01T00:00:00+09:00
         call obj.resolve(140 ,35, DateTime.from_unix_time(1564617600))
         Assert NotEquals(obj.status, v:null, 'object result status')
 
-        let sunrise = '2019-07-31T19:49:20+00:00'
-        let sunset  = '2019-08-01T09:43:22+00:00'
+        " test page https://sunrise-sunset.org/search?location=Tokyo&year=2019&month=8#calendar
+        let sunrise = '2019-07-31T19:47:38+0000'
+        let sunset  = '2019-08-01T09:45:08+0000'
         let sunriseobj = DateTime.from_format(sunrise, '%FT%T%z')
         let sunsetobj  = DateTime.from_format(sunset, '%FT%T%z')
         Assert Equals(obj.result.sunrise.compare(sunriseobj), 0, "sunrise diff")
@@ -48,12 +50,14 @@ Describe Geo.Sun
       It object resolve async work typical data check.
         if Process.is_available()
           let obj = SUN.new()
+        " 1564617600 = 2019-08-01T00:00:00+09:00
           let promise = obj.resolveAsync(140 ,35, DateTime.from_unix_time(1564617600))
           call Promise.wait(promise)
           Assert NotEquals(obj.status, v:null, 'object result status')
 
-          let sunrise = '2019-07-31T19:49:20+00:00'
-          let sunset  = '2019-08-01T09:43:22+00:00'
+          " test page https://sunrise-sunset.org/search?location=Tokyo&year=2019&month=8#calendar
+          let sunrise = '2019-07-31T19:47:38+0000'
+          let sunset  = '2019-08-01T09:45:08+0000'
           let sunriseobj = DateTime.from_format(sunrise, '%FT%T%z')
           let sunsetobj  = DateTime.from_format(sunset, '%FT%T%z')
           Assert Equals(obj.result.sunrise.compare(sunriseobj), 0, "sunrise diff")

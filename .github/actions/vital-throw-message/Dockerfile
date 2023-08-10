@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.21
 
 ENV REVIEWDOG_VERSION=v0.14.2
 RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${REVIEWDOG_VERSION}

@@ -6,13 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code.
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: vint
-        uses: reviewdog/action-vint@v1
+        uses: reviewdog/action-vint@6b002bde4f628db9551a2144d3a615f9159cf9c7 # v1
         with:
           github_token: ${{ secrets.github_token }}
       - name: vint-pr-review
-        uses: reviewdog/action-vint@v1
+        uses: reviewdog/action-vint@6b002bde4f628db9551a2144d3a615f9159cf9c7 # v1
         if: github.event_name == 'pull_request'
         with:
           github_token: ${{ secrets.github_token }}
@@ -22,13 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code.
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: vimlint
-        uses: tsuyoshicho/action-vimlint@v1
+        uses: tsuyoshicho/action-vimlint@73515ed80ed7a95548ae3222498865302ead94f0 # v1
         with:
           github_token: ${{ secrets.github_token }}
       - name: vimlint-pr-review
-        uses: tsuyoshicho/action-vimlint@v1
+        uses: tsuyoshicho/action-vimlint@73515ed80ed7a95548ae3222498865302ead94f0 # v1
         if: github.event_name == 'pull_request'
         with:
           github_token: ${{ secrets.github_token }}
@@ -38,9 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code.
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: misspell-pr-review
-        uses: reviewdog/action-misspell@v1
+        uses: reviewdog/action-misspell@18ffb61effb93b47e332f185216be7e49592e7e1 # v1
         if: github.event_name == 'pull_request'
         with:
           github_token: ${{ secrets.github_token }}
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code.
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: vital-throw-message
         uses: ./.github/actions/vital-throw-message
         with:
